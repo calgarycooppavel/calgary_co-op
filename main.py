@@ -286,7 +286,7 @@ def get_information_product(adddress, driver, wait):
                         if matches[-2] == 'k':
                             weight = matches.replace('kg', '')  
                         else:
-                            weight =f'0.{matches.replace('g', '')}'  
+                            weight =f"0.{matches.replace('g', '')}"  
                         
                     pattern = r'\$(\d+(?:\.\d+)?)\s*/kg'
                     matches1 = re.findall(pattern, text)[0]
