@@ -360,7 +360,7 @@ def send_email():
     email_reciver = config['email_reciver']
     
     subject = 'Scraping data'
-    body = f'Scraping is complete as of {datetime.today().strftime('%b-%d-%Y')}'
+    body = f"Scraping is complete as of {datetime.today().strftime('%b-%d-%Y')}"
     #file_path = "calgary_data.csv"  
     
     em = EmailMessage()
