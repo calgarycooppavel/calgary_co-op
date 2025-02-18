@@ -23,13 +23,21 @@ RUN apt-get update && \
     rm google-chrome*.deb && \
     rm -rf /var/lib/apt/lists/*
 
-# Descargar e instalar ChromeDriver
-RUN CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+# Verificar versión de Chrome instalada
+RUN google-chrome --version && echo "Chrome version detected!"
+
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    dpkg -i google-chrome-stable_current_amd64.deb || apt-get install -f -y
+
+# Obtener la versión de Chrome instalada
+RUN CHROMEDRIVER_VERSION=$(curl -sS https://chromedriver.storage.googleapis.com/LATEST_RELEASE_114) && \
     wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" && \
     unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/local/bin/ && \
+    mv chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     rm chromedriver_linux64.zip
+# Verificar que ChromeDriver está correctamente instalado
+RUN chromedriver --version
 
 # Copiar archivos necesarios al contenedor
 WORKDIR /app
@@ -38,7 +46,7 @@ COPY requirements.txt main.py config.json ./
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Configurar variables de entorno para Chrome
+# Configurar variables de entorno
 ENV DISPLAY=:99
 ENV CHROMEDRIVER_PATH=/usr/local/bin/chromedriver
 
